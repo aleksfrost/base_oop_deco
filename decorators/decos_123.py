@@ -1,23 +1,45 @@
-import requests
-import re
+import time
 
-from decorators.func_with_123 import counter, logging, benchmark
+from random import randint
 
 
-@counter
-@logging
-@benchmark
-def word_count(word, url='https://www.gutenberg.org/files/2638/2638-0.txt'):
+def benchmark(func):
+    """
+    Декоратор, выводящий время, которое заняло выполнение декорируемой функции
+    """
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"Время выполнения функции {func.__name__}: {end - start:.6f}")
+        return result
+    return wrapper
 
-    # отправляем запрос в библиотеку Gutenberg и забираем текст
-    raw = requests.get(url).text
 
-    # заменяем в тексте все небуквенные символы на пробелы
-    processed_book = re.sub(r'[\W]+' , ' ', raw).lower()
+def logging(func):
+    """
+    Декоратор, который выводит параметры с которыми была вызвана функция
+    """
 
-    # считаем
-    cnt = len(re.findall(word.lower(), processed_book))
+    def wrapper(*args, **kwargs):
 
-    return f"Cлово {word} встречается {cnt} раз"
+        result = func(*args, **kwargs)
+        print("Функция вызвана с параметрами:")
+        print(args, kwargs)
+        return result
 
-print(word_count('whole'))
+    return wrapper
+
+
+def counter(func):
+    """
+    Декоратор, считающий и выводящий количество вызовов декорируемой функции
+    """
+    count = 0
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        return result
+    count = count + 1
+    print(f"Функция была вызвана: {count} раз")
+
+    return wrapper

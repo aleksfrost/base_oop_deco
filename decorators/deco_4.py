@@ -1,24 +1,28 @@
 
-from decorators.func_with_123 import benchmark
+from decos_123 import benchmark
 
 from random import randint
 
+
+
+@benchmark
 def memo(func):
-  """
-  Декоратор, запоминающий результаты исполнения функции func, чьи аргументы args должны быть хешируемыми
-  """
-  cache = {}
+    """
+    Декоратор, запоминающий результаты исполнения функции func, чьи аргументы args должны быть хешируемыми
+    """
+    cache = {}
 
-  def fmemo(*args):
-    n = args
-    if n in cache:
+    def fmemo(*args):
+        n = args
+        if n in cache:
+            return cache[n]
+        else:
+            cache[n] = func(*args)
         return cache[n]
-    else:
-        cache[n] = func(*args)
-    return cache[n]
 
-  fmemo.cache = cache
-  return fmemo
+    fmemo.cache = cache
+    return fmemo
+
 
 @benchmark
 def fib1(n):
@@ -28,7 +32,6 @@ def fib1(n):
 
 
 @memo
-@benchmark
 def fib2(n):
     if n < 2:
         return n
