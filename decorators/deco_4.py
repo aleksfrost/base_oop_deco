@@ -1,5 +1,5 @@
 
-from decos import benchmark
+from decorators.func_with_123 import benchmark
 
 from random import randint
 

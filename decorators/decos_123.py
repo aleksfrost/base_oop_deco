@@ -1,7 +1,7 @@
 import requests
 import re
 
-from decos import counter, logging, benchmark
+from decorators.func_with_123 import counter, logging, benchmark
 
 
 @counter
